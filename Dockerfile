@@ -27,8 +27,11 @@ COPY	srcs/config.inc.php /var/www/html/phpmyadmin
 RUN	mkdir /etc/nginx/ssl/ && \
 	openssl req -x509 -newkey rsa:4096 -keyout /etc/nginx/ssl/key.pem -out /etc/nginx/ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'
 
+COPY	srcs/autoindex.sh /home/
+
 ENTRYPOINT	service nginx restart && \
 		service php7.3-fpm start && \
 		service mysql start && \
+		./home/autoindex.sh && \
 		bash
 	
